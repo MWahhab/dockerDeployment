@@ -1,0 +1,59 @@
+services:
+
+  apache:
+    image: ubuntu/apache2
+    volumes:
+      - ./configs/apache/apache2.conf:/etc/apache2/conf.d/
+      - ./app/src:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - php-fpm
+    restart: always
+
+  php-fpm:
+    image: php-fpm-custom:latest
+    volumes:
+      - ./app/src:/var/www/html
+
+  php-cli:
+    image: php-cli-custom:latest
+    volumes:
+      - ./app/src:/var/www/html
+    command: tail -f /dev/null
+
+  node:
+    image: node
+    volumes:
+      - ./app/src:/var/www/html
+    command: tail -f /dev/null
+    ports:
+      - "5173:5173"
+
+  mysql:
+    image: mysql
+    volumes:
+      - database_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: deployment_db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: adminpassword
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: admin
+      PMA_PASSWORD: adminpassword
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  database_data:
