@@ -1,9 +1,8 @@
 services:
 
   apache:
-    image: ubuntu/apache2
+    image: apache-custom:latest
     volumes:
-      - ./configs/apache/apache2.conf:/etc/apache2/conf.d/
       - ./app/src:/var/www/html
     ports:
       - "80:80"
@@ -26,7 +25,7 @@ services:
     image: node
     volumes:
       - ./app/src:/var/www/html
-    command: tail -f /dev/null
+    command: sh -c "cd /var/www/html && npm install && npm run dev --host"
     ports:
       - "5173:5173"
 
