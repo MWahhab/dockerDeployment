@@ -24,4 +24,8 @@ RUN if [ "$PROD" = "false" ]; then \
     cp /configs/xdebug/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini; \
     fi
 
+RUN if [ "$PROD" = "true" ]; then \
+    cp /app/src /var/www/html; \
+    fi
+
 RUN chmod -Rf 777 /var/www/html
