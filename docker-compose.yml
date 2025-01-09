@@ -20,6 +20,8 @@ services:
     volumes:
       - ./app/src:/var/www/html
     command: tail -f /dev/null
+    depends_on:
+      - php-fpm
 
   node:
     image: node
@@ -28,6 +30,8 @@ services:
     command: sh -c "cd /var/www/html && npm install && npm run dev --host"
     ports:
       - "5173:5173"
+    depends_on:
+      - php-fpm
 
   mysql:
     image: mysql
