@@ -1,5 +1,3 @@
-ARG PROD=false
-
 FROM node:alpine
 
 RUN apk add --no-cache rsync
