@@ -139,6 +139,12 @@ services:
     depends_on:
       - php-fpm
     restart: always
+EOL
+    if [ "$changePlatform" = "y" ]; then
+        echo "    platform: $platformForBuild" >> docker-compose.prod.yml
+    fi
+
+    cat <<EOL >> docker-compose.prod.yml
 
   php-fpm:
     image: $docker_username/php-fpm-prod:$image_tag
@@ -146,6 +152,12 @@ services:
       - app_data:/var/www/html
     depends_on:
       - node
+EOL
+    if [ "$changePlatform" = "y" ]; then
+        echo "    platform: $platformForBuild" >> docker-compose.prod.yml
+    fi
+
+    cat <<EOL >> docker-compose.prod.yml
 
   php-cli:
     image: $docker_username/php-cli-prod:$image_tag
@@ -154,6 +166,12 @@ services:
     command: tail -f /dev/null
     depends_on:
       - node
+EOL
+    if [ "$changePlatform" = "y" ]; then
+        echo "    platform: $platformForBuild" >> docker-compose.prod.yml
+    fi
+
+    cat <<EOL >> docker-compose.prod.yml
 
   node:
     image: $docker_username/node-prod:$image_tag
@@ -162,6 +180,12 @@ services:
     command: sh -c "rsync -a --delete /var/www/html/ /var/www/volume && cd /var/www/volume && npm install && npm run build && tail -f /dev/null"
     ports:
       - "5173:5173"
+EOL
+    if [ "$changePlatform" = "y" ]; then
+        echo "    platform: $platformForBuild" >> docker-compose.prod.yml
+    fi
+
+    cat <<EOL >> docker-compose.prod.yml
 
   mysql:
     image: mysql
